@@ -7,28 +7,22 @@
       <thead>
         <tr>
           <th scope="col">#Id</th>
-          <th scope="col">Book Name</th>
-          <th scope="col">Writer Name</th>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
           <th scope="col">Delete</th>
-          <th scope="col">Update</th>
         </tr>
       </thead>
       <tbody>
-        {% for book in books %}
+        {% for writer in writers %}
         <tr>
-          <th scope="row">{{book.id}}</th>
-          <td>{{book.name}}</td>
-          <td>{{book.writer_name}}</td>
+          <th scope="row">{{writer.id}}</th>
+          <td>{{writer.first_name}}</td>
+          <td>{{writer.last_name}}</td>
           <td>
             <a
               class="btn btn-sm btn-danger"
-              href="{% url 'deleteBook' book.id %}"
+              href="{% url 'deleteWriter' writer.id %}"
               >Delete</a
-            >
-          </td>
-          <td>
-            <a class="btn btn-sm btn-info" href="{% url 'updateBook' book.id %}"
-              >Update</a
             >
           </td>
         </tr>
