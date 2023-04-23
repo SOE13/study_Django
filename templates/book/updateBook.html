@@ -18,13 +18,13 @@
     <label for="name" class="col-sm-2 col-form-label">Writer Name :</label>
     <div class="col-sm-5">
       <select
-        name="writer_name"
+        name="writer_id"
         class="form-select"
         aria-label="Default select example"
       >
         <option value="0" selected>Select Writer</option>
         {% for writer in writers %}
-        <option value="{{writer.first_name}} {{writer.last_name}}">
+        <option value="{{writer.id}}">
           {{writer.first_name}} {{writer.last_name}}
         </option>
         {% endfor %}

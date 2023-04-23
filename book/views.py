@@ -31,13 +31,13 @@ def addNewBook(request):
     if request.method == "POST":
         
         name=request.POST['name']
-        writer_name=request.POST['writer_name']
+        writer_id=request.POST['writer_id']
         if Book.objects.filter(name=name).exists():
             context['error']='This book is Taken'
             return render(request, 'book/addBook.html',context)
         else:
             
-            Book.objects.create(name=name,writer_name=writer_name)
+            Book.objects.create(name=name,writer=Writer.objects.get(id=writer_id))
         
 
         return redirect("bookList")
@@ -53,9 +53,9 @@ def updateBook(request,id):
     if request.method == "POST":
             
             name=request.POST['name']
-            writer_name=request.POST['writer_name']
+            writer_id=request.POST['writer_id']
             book.name=name
-            book.writer_name=writer_name
+            book.writer=Writer.objects.get(id=writer_id)
             book.save()
             return redirect("bookList")
 
