@@ -20,9 +20,7 @@
       >
         <option value="0" selected>Select Writer</option>
         {% for writer in writers %}
-        <option value="{{writer.id}}">
-          {{writer.first_name}} {{writer.last_name}}
-        </option>
+        <option value="{{writer.id}}">{{writer}}</option>
         {% endfor %}
       </select>
     </div>

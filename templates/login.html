@@ -1,0 +1,24 @@
+{% extends 'main.html' %} {% block context %}
+<h1 class="text-center">Login Page</h1>
+
+<div class="container">
+  <div class="col-6 m-auto mt-5">
+    <form>
+      <div class="mb-3">
+        <label for="name" class="form-label">User Name</label>
+        <input type="text" class="form-control" id="name" />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock context %}

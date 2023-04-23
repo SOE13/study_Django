@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import Book,Writer
+from .models import Book,Writer,Users
 
 # Create your views here.
 from django.http import HttpResponse
@@ -10,7 +10,24 @@ def home(request):
     return HttpResponse("<h1>Home Page</h1>")
 
 def viewReturn(request):
-    return render(request, "index.html")
+    return render(request, "login.html")
+
+
+def user(request):
+    context={'users':Users.objects.all()}
+    if request.method == "POST":
+        name=request.POST['name']
+        password=request.POST['password']
+        if Users.objects.filter(user_name=name).exists():
+            context['error']='This User is Already exited'
+        else:
+            Users.objects.create(user_name=name,password=password)
+    return render(request, 'user/user.html',context)
+
+def deleteUser(request,id):
+    user=Users.objects.get(id=id)
+    user.delete()
+    return redirect("user")
 
 def bookList(request):
     books=Book.objects.all()
