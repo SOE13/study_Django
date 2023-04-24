@@ -1,20 +1,27 @@
 {% extends 'main.html' %} {% block context %}
 <h1 class="text-center">Login Page</h1>
+<h4 class="text-center text-danger">{{login_error}}</h4>
 
 <div class="container">
   <div class="col-6 m-auto mt-5">
-    <form>
+    <form action="{% url 'login' %}" method="post">
+      {% csrf_token %}
       <div class="mb-3">
         <label for="name" class="form-label">User Name</label>
-        <input type="text" class="form-control" id="name" />
+        <input name="name" type="text" class="form-control" id="name" />
+        <div id="emailHelp" class="form-text text-danger">{{user_error}}</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Password</label>
         <input
+          name="password"
           type="password"
           class="form-control"
           id="exampleInputPassword1"
         />
+        <div id="emailHelp" class="form-text text-danger">
+          {{password_error}}
+        </div>
       </div>
 
       <button type="submit" class="btn btn-primary">Submit</button>

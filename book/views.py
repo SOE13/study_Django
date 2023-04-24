@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import Book,Writer,Users
+from .form import UserFrom
 
 # Create your views here.
 from django.http import HttpResponse
@@ -9,15 +10,41 @@ from django.http import HttpResponse
 def home(request):
     return HttpResponse("<h1>Home Page</h1>")
 
-def viewReturn(request):
-    return render(request, "login.html")
-
-
-def user(request):
-    context={'users':Users.objects.all()}
+def login(request):
     if request.method == "POST":
         name=request.POST['name']
         password=request.POST['password']
+        if Users.objects.filter(user_name=name).exists():
+            user=Users.objects.get(user_name=name)
+            if user.password==password:
+                request.session['user']=name
+                return redirect("user")
+            else:
+                return render(request, "login.html",{'password_error':"Wrong Password!"})
+        else:
+            return render(request, "login.html",{'user_error':"User Not found!"})
+    return render(request, "login.html")
+
+
+def logout(request):
+    try:
+        del request.session['user']
+    except:
+        pass
+    return render(request, "login.html")
+
+def user(request):
+    try:
+        user_name=request.session['user']
+    except:
+        return render(request, "login.html",{'login_error':'Login First'})
+
+    context={'users':Users.objects.all()}
+    context['form']=UserFrom()
+    if request.method == "POST":
+        form=UserFrom(request.POST)
+        name=form['user_name'].value()
+        password=form['password'].value()
         if Users.objects.filter(user_name=name).exists():
             context['error']='This User is Already exited'
         else:
