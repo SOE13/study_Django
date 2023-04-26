@@ -25,3 +25,10 @@ class Book(models.Model):
 
     def __str__(self):
         return self.name
+
+class FavBookCollection(models.Model):
+    collect_name=models.CharField(max_length=100,null=False)
+    books=models.ManyToManyField(Book)
+
+    def __str__(self):
+        return self.collect_name

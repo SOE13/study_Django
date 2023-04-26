@@ -27,3 +27,12 @@ class BookForm(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control'}),
             'writer':forms.Select(attrs={'class':'form-select'}),
         }
+
+class FavForm(forms.ModelForm):
+    class Meta:
+        model=models.FavBookCollection
+        fields='__all__'
+        widgets={
+            'collect_name':forms.TextInput(attrs={'class':'form-control col-6'}),
+            'books':forms.SelectMultiple(attrs={'class':'form-select col-6'}),
+        }

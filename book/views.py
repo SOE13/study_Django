@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
-from .models import Book,Writer,Users
-from .form import UserFrom,WriterForm,BookForm
+from .models import Book,Writer,Users,FavBookCollection
+from .form import UserFrom,WriterForm,BookForm,FavForm
 
 # Create your views here.
 from django.http import HttpResponse
@@ -122,3 +122,11 @@ def deleteWriter(request,id):
    
     
     return redirect("writerList")
+
+def add_fav_book_collection(request):
+    context={'favlist':FavBookCollection.objects.all()}
+    context['form']=FavForm()
+    if request.method == "POST":
+        form=FavForm(request.POST)
+        form.save()
+    return render(request, 'book/fav.html',context)
