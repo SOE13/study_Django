@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import Book,Writer,Users
-from .form import UserFrom
+from .form import UserFrom,WriterForm,BookForm
 
 # Create your views here.
 from django.http import HttpResponse
@@ -71,18 +71,11 @@ def deleteBook(request,id):
     return redirect("bookList")
 
 def addNewBook(request):
-    context={'writers':Writer.objects.all()}
+    context={'writers':Writer.objects.all(),'form':BookForm()}
     if request.method == "POST":
-        
-        name=request.POST['name']
-        writer_id=request.POST['writer_id']
-        if Book.objects.filter(name=name).exists():
-            context['error']='This book is Taken'
-            return render(request, 'book/addBook.html',context)
-        else:
-            
-            Book.objects.create(name=name,writer=Writer.objects.get(id=writer_id))
-        
+        form=BookForm(request.POST)
+        if form.is_valid():
+            form.save()    
 
         return redirect("bookList")
 
@@ -92,15 +85,14 @@ def addNewBook(request):
 
 def updateBook(request,id):
     book=Book.objects.get(id=id)
-    context={'writers':Writer.objects.all(),'book':book}
+
+    context={'writers':Writer.objects.all(),'form':BookForm(instance=book)}
 
     if request.method == "POST":
             
-            name=request.POST['name']
-            writer_id=request.POST['writer_id']
-            book.name=name
-            book.writer=Writer.objects.get(id=writer_id)
-            book.save()
+        form=BookForm(request.POST,instance=book)
+        if form.is_valid():
+            form.save()  
             return redirect("bookList")
 
     return render(request, "book/updateBook.html",context)
@@ -113,22 +105,18 @@ def writerList(request):
     return render(request, "writer/writerList.html",context)
 
 def addWriter(request):
+    context={'form':WriterForm()}
     if request.method == "POST":
-        
-        first_name=request.POST['first_name']
-        last_name=request.POST['last_name']
-        if Writer.objects.filter(first_name=first_name,last_name=last_name).exists():
-            
-            return render(request, 'writer/addWriter.html',{'error':'This Writer is already haved'})
+        form=WriterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("writerList")
         else:
-            
-            Writer.objects.create(first_name=first_name,last_name=last_name)
-        
-
-        return redirect("writerList")
-    return render(request, 'writer/addWriter.html')
+            context['error']='This Writer already have'
+    return render(request, 'writer/addWriter.html',context)
 
 def deleteWriter(request,id):
+    
     writer=Writer.objects.get(id=id)
     writer.delete()
    

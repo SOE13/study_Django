@@ -3,7 +3,7 @@
 {% include 'nav.html' %}
 <div>{{error}}</div>
 <form action="" method="post">
-  {% csrf_token %}
+  {% csrf_token %} {% comment %}
   <div class="mb-3 row">
     <label for="name" class="col-sm-2 col-form-label">Book Name :</label>
     <div class="col-sm-5">
@@ -25,6 +25,8 @@
       </select>
     </div>
   </div>
+  {% endcomment %}
+  <div class="col-6">{{form.as_p}}</div>
 
   <div class="mb-3 row">
     <label for="name" class="col-sm-2 col-form-label"></label>
