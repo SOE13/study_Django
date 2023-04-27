@@ -8,6 +8,7 @@
         <tr>
           <th scope="col">Id</th>
           <th scope="col">Fav Name</th>
+          <th scope="col">Fav Books</th>
           <th scope="col">Delete</th>
         </tr>
       </thead>
@@ -16,6 +17,11 @@
         <tr>
           <th scope="row">{{fav.id}}</th>
           <td>{{fav.collect_name}}</td>
+          <td>
+            {% for book in fav.books.all %}
+            <p>{{book}}</p>
+            {% endfor %}
+          </td>
           <td>
             <a class="btn btn-sm btn-danger" href="">Delete</a>
           </td>

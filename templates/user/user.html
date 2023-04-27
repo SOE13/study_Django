@@ -30,7 +30,7 @@
   </div>
   <div class="col-5">
     <form action="" method="post">
-      {% csrf_token %}
+      {% csrf_token %} {% comment %}
       <div class="text-danger">{{error}}</div>
       <div class="mb-3">
         <label for="name" class="form-label">User Name</label>
@@ -42,6 +42,7 @@
 
         {{form.password}}
       </div>
+      {% endcomment %} {{form.as_p}}
 
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>

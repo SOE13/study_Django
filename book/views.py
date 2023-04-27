@@ -1,6 +1,9 @@
 from django.shortcuts import render,redirect
 from .models import Book,Writer,Users,FavBookCollection
 from .form import UserFrom,WriterForm,BookForm,FavForm
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 from django.http import HttpResponse
@@ -10,58 +13,43 @@ from django.http import HttpResponse
 def home(request):
     return HttpResponse("<h1>Home Page</h1>")
 
-def login(request):
+def loginPage(request):
     if request.method == "POST":
         name=request.POST['name']
         password=request.POST['password']
-        if Users.objects.filter(user_name=name).exists():
-            user=Users.objects.get(user_name=name)
-            if user.password==password:
-                request.session['user']=name
-                return redirect("user")
-            else:
-                return render(request, "login.html",{'password_error':"Wrong Password!"})
-        else:
-            return render(request, "login.html",{'user_error':"User Not found!"})
+        user = authenticate(request,username=name,password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('user')
     return render(request, "login.html")
 
 
-def logout(request):
-    try:
-        del request.session['user']
-    except:
-        pass
+def logoutPage(request):
+    logout(request)
     return render(request, "login.html")
 
+@login_required(login_url='login')
 def user(request):
-    try:
-        user_name=request.session['user']
-    except:
-        return render(request, "login.html",{'login_error':'Login First'})
-
     context={'users':Users.objects.all()}
-    context['form']=UserFrom()
+    context['form']=UserCreationForm()
     if request.method == "POST":
-        form=UserFrom(request.POST)
-        name=form['user_name'].value()
-        password=form['password'].value()
-        if Users.objects.filter(user_name=name).exists():
-            context['error']='This User is Already exited'
-        else:
-            Users.objects.create(user_name=name,password=password)
+        form=UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+        
     return render(request, 'user/user.html',context)
-
+@login_required(login_url='login')
 def deleteUser(request,id):
     user=Users.objects.get(id=id)
     user.delete()
     return redirect("user")
-
+@login_required(login_url='login')
 def bookList(request):
     books=Book.objects.all()
     context={'books':books}
 
     return render(request, 'book/bookList.html',context)
-
+@login_required(login_url='login')
 def deleteBook(request,id):
 
     book=Book.objects.get(id=id)
@@ -69,7 +57,7 @@ def deleteBook(request,id):
    
     
     return redirect("bookList")
-
+@login_required(login_url='login')
 def addNewBook(request):
     context={'writers':Writer.objects.all(),'form':BookForm()}
     if request.method == "POST":
@@ -82,7 +70,7 @@ def addNewBook(request):
     
     
     return render(request, 'book/addBook.html',context)
-
+@login_required(login_url='login')
 def updateBook(request,id):
     book=Book.objects.get(id=id)
 
@@ -98,12 +86,12 @@ def updateBook(request,id):
     return render(request, "book/updateBook.html",context)
 
 
-
+@login_required(login_url='login')
 def writerList(request):
     writers=Writer.objects.all()
     context={'writers':writers}
     return render(request, "writer/writerList.html",context)
-
+@login_required(login_url='login')
 def addWriter(request):
     context={'form':WriterForm()}
     if request.method == "POST":
@@ -114,7 +102,7 @@ def addWriter(request):
         else:
             context['error']='This Writer already have'
     return render(request, 'writer/addWriter.html',context)
-
+@login_required(login_url='login')
 def deleteWriter(request,id):
     
     writer=Writer.objects.get(id=id)
@@ -122,11 +110,12 @@ def deleteWriter(request,id):
    
     
     return redirect("writerList")
-
+@login_required(login_url='login')
 def add_fav_book_collection(request):
     context={'favlist':FavBookCollection.objects.all()}
     context['form']=FavForm()
     if request.method == "POST":
         form=FavForm(request.POST)
-        form.save()
+        if form.is_valid():
+            form.save()
     return render(request, 'book/fav.html',context)
