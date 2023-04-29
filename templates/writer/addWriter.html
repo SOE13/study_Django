@@ -1,37 +1,27 @@
 {% extends 'main.html' %} {% block context %}
 <h1 class="text-center">Add Writer</h1>
 {% include 'nav.html' %}
-<div>{{error}}</div>
-<div class="col-4">
+
+<div class="col-4 container">
   <form action="" method="post">
-    {% csrf_token %} {% comment %}
-    <div class="mb-3 row">
-      <label for="first_name" class="col-sm-2 col-form-label"
-        >First Name :</label
-      >
-      <div class="col-sm-5">
-        <input
-          type="text"
-          name="first_name"
-          class="form-control"
-          id="first_name"
-        />
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">{{form.first_name.label}}</label>
+      {{form.first_name}}
+      <div class="form-text text-danger">
+        {% for error in form.first_name.errors %} {{ error }} {% endfor %}
       </div>
     </div>
-    <div class="mb-3 row">
-      <label for="last_name" class="col-sm-2 col-form-label"
-        >First Name :</label
-      >
-      <div class="col-sm-5">
-        <input
-          type="text"
-          name="last_name"
-          class="form-control"
-          id="last_name"
-        />
-      </div>
+    <div class="mb-3">
+      <label class="form-label">{{form.last_name.label}}</label>
+      {{form.last_name}}
     </div>
-    {% endcomment %} {{form.as_p}}
+    <div class="mb-3">
+      <label class="form-label">{{form.birthday.label}}</label>
+      {{form.birthday}}
+    </div>
+
     <div class="mb-3 row">
       <label for="name" class="col-sm-2 col-form-label"></label>
       <div class="col-sm-10">

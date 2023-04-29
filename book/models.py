@@ -15,6 +15,8 @@ class Writer(models.Model):
     last_name=models.CharField(max_length=10)
     age=models.CharField(max_length=2,null=True)
 
+    birthday=models.DateField(null=True)
+
     def __str__(self):
         return self.first_name +' '+ self.last_name
 
@@ -22,6 +24,9 @@ class Writer(models.Model):
 class Book(models.Model):
     name=models.CharField(max_length=100,null=False)
     writer=models.ForeignKey(Writer, on_delete=models.SET_NULL,null=True)
+
+    cerated=models.DateTimeField(auto_now_add=True,null=True)
+    updated=models.DateTimeField(auto_now=True,null=True)
 
     def __str__(self):
         return self.name

@@ -2,38 +2,18 @@
 <h1 class="text-center">Add new Book</h1>
 {% include 'nav.html' %}
 <div>{{error}}</div>
-<form action="" method="post">
-  {% csrf_token %} {% comment %}
-  <div class="mb-3 row">
-    <label for="name" class="col-sm-2 col-form-label">Book Name :</label>
-    <div class="col-sm-5">
-      <input type="text" name="name" class="form-control" id="name" />
-    </div>
-  </div>
-  <div class="mb-3 row">
-    <label for="name" class="col-sm-2 col-form-label">Writer Name :</label>
-    <div class="col-sm-5">
-      <select
-        name="writer_id"
-        class="form-select"
-        aria-label="Default select example"
-      >
-        <option value="0" selected>Select Writer</option>
-        {% for writer in writers %}
-        <option value="{{writer.id}}">{{writer}}</option>
-        {% endfor %}
-      </select>
-    </div>
-  </div>
-  {% endcomment %}
-  <div class="col-6">{{form.as_p}}</div>
+<div class="container">
+  <form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="col-6">{{form.as_p}}</div>
 
-  <div class="mb-3 row">
-    <label for="name" class="col-sm-2 col-form-label"></label>
-    <div class="col-sm-10">
-      <input type="submit" class="btn btn-primary" id="name" />
+    <div class="mb-3 row">
+      <label for="name" class="col-sm-2 col-form-label"></label>
+      <div class="col-sm-10">
+        <input type="submit" class="btn btn-primary" id="name" />
+      </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>
 
 {% endblock context %}

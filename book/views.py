@@ -4,7 +4,7 @@ from .form import UserFrom,WriterForm,BookForm,FavForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-
+from django.core.files.storage import FileSystemStorage
 # Create your views here.
 from django.http import HttpResponse
 
@@ -36,19 +36,23 @@ def user(request):
         form=UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-        
+        else:
+            return render(request, 'user/user.html',{'users':Users.objects.all(),'form':form})
     return render(request, 'user/user.html',context)
+
 @login_required(login_url='login')
 def deleteUser(request,id):
     user=Users.objects.get(id=id)
     user.delete()
     return redirect("user")
+
 @login_required(login_url='login')
 def bookList(request):
     books=Book.objects.all()
     context={'books':books}
 
     return render(request, 'book/bookList.html',context)
+    
 @login_required(login_url='login')
 def deleteBook(request,id):
 
@@ -57,6 +61,7 @@ def deleteBook(request,id):
    
     
     return redirect("bookList")
+
 @login_required(login_url='login')
 def addNewBook(request):
     context={'writers':Writer.objects.all(),'form':BookForm()}
@@ -64,12 +69,12 @@ def addNewBook(request):
         form=BookForm(request.POST)
         if form.is_valid():
             form.save()    
-
         return redirect("bookList")
 
     
     
     return render(request, 'book/addBook.html',context)
+
 @login_required(login_url='login')
 def updateBook(request,id):
     book=Book.objects.get(id=id)
@@ -91,6 +96,7 @@ def writerList(request):
     writers=Writer.objects.all()
     context={'writers':writers}
     return render(request, "writer/writerList.html",context)
+
 @login_required(login_url='login')
 def addWriter(request):
     context={'form':WriterForm()}
@@ -100,8 +106,9 @@ def addWriter(request):
             form.save()
             return redirect("writerList")
         else:
-            context['error']='This Writer already have'
+            return render(request, 'writer/addWriter.html',{'form':form})
     return render(request, 'writer/addWriter.html',context)
+
 @login_required(login_url='login')
 def deleteWriter(request,id):
     
@@ -110,6 +117,7 @@ def deleteWriter(request,id):
    
     
     return redirect("writerList")
+
 @login_required(login_url='login')
 def add_fav_book_collection(request):
     context={'favlist':FavBookCollection.objects.all()}

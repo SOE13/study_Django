@@ -16,13 +16,23 @@ class WriterForm(forms.ModelForm):
         widgets={
             'first_name':forms.TextInput(attrs={'class':'form-control'}),
             'last_name':forms.TextInput(attrs={'class':'form-control'}),
+            'birthday':forms.DateInput(attrs={'class': 'form-control','type':'date'})
+        }
+        help_texts = {
+            "first_name": ("First name can't be dulicated."),
+        }
+        error_messages = {
+            "first_name": {
+                "max_length": ("This writer's name is too long."),
+                "unique": ("This writer's Already exited."),
+            },
         }
         
         
 class BookForm(forms.ModelForm):
     class Meta:
         model= models.Book
-        fields='__all__'
+        fields=['name','writer']
         widgets={
             'name':forms.TextInput(attrs={'class':'form-control'}),
             'writer':forms.Select(attrs={'class':'form-select'}),
